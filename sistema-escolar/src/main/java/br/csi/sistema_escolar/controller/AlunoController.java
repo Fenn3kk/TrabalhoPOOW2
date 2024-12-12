@@ -27,12 +27,16 @@ public class AlunoController {
 
     @GetMapping("/listar")
     @Operation(summary = "Listar todos os alunos", description = "Retorna uma lista de todos os alunos registrados.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Alunos encontrado"),
+            @ApiResponse(responseCode = "404", description = "Alunos não encontrados")
+    })
     public ResponseEntity<List<Aluno>> listarAlunos() {
         List<Aluno> alunos = this.service.listarAlunos();
         return ResponseEntity.ok(alunos);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/buscar/id/{id}")
     @Operation(summary = "Buscar aluno por ID", description = "Retorna um aluno correspondente ao ID fornecido")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Aluno encontrado"),
@@ -43,7 +47,7 @@ public class AlunoController {
         return aluno != null ? ResponseEntity.ok(aluno) : ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/uuid/{uuid}")
+    @GetMapping("/buscar/uuid/{uuid}")
     @Operation(summary = "Buscar aluno por UUID", description = "Retorna um aluno correspondente ao UUID fornecido")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Aluno encontrado"),
@@ -66,7 +70,7 @@ public class AlunoController {
         return ResponseEntity.created(uri).body(aluno);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/atualizar/id/{id}")
     @Operation(summary = "Atualizar um aluno existente por ID", description = "Atualiza as informações de um aluno existente.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Aluno atualizado com sucesso"),
@@ -82,7 +86,7 @@ public class AlunoController {
         return ResponseEntity.notFound().build();
     }
 
-    @PutMapping("/uuid/{uuid}")
+    @PutMapping("/atualizar/uuid/{uuid}")
     @Operation(summary = "Atualizar um aluno por UUID", description = "Atualiza as informações de um aluno existente identificado pelo UUID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Aluno atualizado com sucesso"),
@@ -103,13 +107,13 @@ public class AlunoController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deletar/id/{id}")
     @Operation(summary = "Deletar um aluno por ID", description = "Remove um aluno pelo seu ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Aluno deletado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Aluno não encontrado")
     })
-    public ResponseEntity<Void> deletarAluno(@PathVariable Long id) {
+    public ResponseEntity<Void> deletarAlunoPorID(@PathVariable Long id) {
         Aluno alunoExistente = this.service.getAluno(id);
         if (alunoExistente != null) {
             this.service.excluirAluno(id);
@@ -118,7 +122,7 @@ public class AlunoController {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/uuid/{uuid}")
+    @DeleteMapping("/deletar/uuid/{uuid}")
     @Operation(summary = "Deletar um aluno por UUID", description = "Remove um aluno pelo seu UUID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Aluno deletado com sucesso"),

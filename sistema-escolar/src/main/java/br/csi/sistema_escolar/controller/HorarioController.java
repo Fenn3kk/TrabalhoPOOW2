@@ -27,12 +27,16 @@ public class HorarioController {
 
     @GetMapping("/listar")
     @Operation(summary = "Listar todos os horários", description = "Retorna uma lista de todos os horários registrados.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Horários encontrados"),
+            @ApiResponse(responseCode = "404", description = "Horários não encontrados")
+    })
     public ResponseEntity<List<Horario>> listarHorarios() {
         List<Horario> horarios = this.service.listarHorarios();
-        return ResponseEntity.ok(horarios); // Garantindo consistência no retorno
+        return ResponseEntity.ok(horarios);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/buscar/id/{id}")
     @Operation(summary = "Buscar horário por ID", description = "Retorna um horário correspondente ao ID fornecido")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Horário encontrado"),
@@ -43,7 +47,7 @@ public class HorarioController {
         return horario != null ? ResponseEntity.ok(horario) : ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/uuid/{uuid}")
+    @GetMapping("/buscar/uuid/{uuid}")
     @Operation(summary = "Buscar horário por UUID", description = "Retorna um horário correspondente ao UUID fornecido")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Horário encontrado"),
@@ -66,8 +70,8 @@ public class HorarioController {
         return ResponseEntity.created(uri).body(horario); // Garantindo consistência ao retornar o próprio horário
     }
 
-    @PutMapping("/{id}")
-    @Operation(summary = "Atualizar um horário existente por IS", description = "Atualiza as informações de um horário existente.")
+    @PutMapping("/atualizar/id/{id}")
+    @Operation(summary = "Atualizar um horário existente por ID", description = "Atualiza as informações de um horário existente.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Horário atualizado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Horário não encontrado")
@@ -82,7 +86,7 @@ public class HorarioController {
         return ResponseEntity.notFound().build();
     }
 
-    @PutMapping("/uuid/{uuid}")
+    @PutMapping("/atualizar/uuid/{uuid}")
     @Operation(summary = "Atualizar um horário existente por UUID", description = "Atualiza as informações de um horário existente identificado pelo UUID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Horário atualizado com sucesso"),
@@ -105,7 +109,7 @@ public class HorarioController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deletar/id/{id}")
     @Operation(summary = "Deletar um horário por ID", description = "Remove um horário pelo seu ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Horário deletado com sucesso"),
@@ -120,7 +124,7 @@ public class HorarioController {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/uuid/{uuid}")
+    @DeleteMapping("/deletar/uuid/{uuid}")
     @Operation(summary = "Deletar um horário por UUID", description = "Remove um horário pelo seu UUID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Horário deletado com sucesso"),

@@ -31,11 +31,15 @@ public class ProfessorController {
 
     @GetMapping("/listar")
     @Operation(summary = "Listar todos os professores", description = "Retorna uma lista de todos os professores registrados.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Professores encontrados"),
+            @ApiResponse(responseCode = "404", description = "Professores não encontrados")
+    })
     public List<Professor> listarProfessores() {
         return this.service.listarProfessores();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/buscar/id/{id}")
     @Operation(summary = "Buscar professor por ID", description = "Retorna um professor correspondente ao ID fornecido")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Professor encontrado",
@@ -48,7 +52,7 @@ public class ProfessorController {
         return professor != null ? ResponseEntity.ok(professor) : ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/uuid/{uuid}")
+    @GetMapping("buscar/uuid/{uuid}")
     @Operation(summary = "Buscar professor por UUID", description = "Retorna um professor correspondente ao UUID fornecido")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Professor encontrado",
@@ -75,7 +79,7 @@ public class ProfessorController {
         return ResponseEntity.created(uri).body(professor);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/atualizar/id/{id}")
     @Operation(summary = "Atualizar um professor existente por ID", description = "Atualiza as informações de um professor existente.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Professor atualizado com sucesso"),
@@ -91,7 +95,7 @@ public class ProfessorController {
         return ResponseEntity.notFound().build();
     }
 
-    @PutMapping("/uuid/{uuid}")
+    @PutMapping("/atualizar/uuid/{uuid}")
     @Operation(summary = "Atualizar um professor existente por UUID", description = "Atualiza as informações de um professor com base no UUID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Professor atualizado com sucesso"),
@@ -113,7 +117,7 @@ public class ProfessorController {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deletar/id/{id}")
     @Operation(summary = "Deletar um professor por ID", description = "Remove um professor pelo seu ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Professor deletado com sucesso"),
@@ -128,7 +132,7 @@ public class ProfessorController {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/uuid/{uuid}")
+    @DeleteMapping("deletar/uuid/{uuid}")
     @Operation(summary = "Deletar um professor por UUID", description = "Remove um professor pelo seu UUID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Professor deletado com sucesso"),

@@ -6,6 +6,7 @@ import br.csi.sistema_escolar.model.turma.Turma;
 import br.csi.sistema_escolar.model.turma.TurmaRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -58,7 +59,7 @@ public class TurmaService {
             UUID uuidFormatado = UUID.fromString(uuid); // Validação do UUID
             return this.turmaRepository.findTurmaByUuid(uuidFormatado);
         } catch (IllegalArgumentException e) {
-            return null; // Caso o UUID seja inválido
+            return null;
         }
     }
 
@@ -67,11 +68,18 @@ public class TurmaService {
             UUID uuidFormatado = UUID.fromString(uuid); // Validação do UUID
             this.turmaRepository.deleteTurmaByUuid(uuidFormatado);
         } catch (IllegalArgumentException e) {
-            // Se UUID for inválido, você pode lançar uma exceção ou apenas não fazer nada
         }
     }
 
-    public Turma adicionarAlunoNaTurma(UUID turmaUUID, UUID alunoUUID) {
+    public List<Aluno> listarAlunosTurma(UUID turmaUUID) {
+        Turma turma = turmaRepository.findTurmaByUuid(turmaUUID);
+        if (turma != null) {
+            return turma.getAlunos();
+        }
+        return Collections.emptyList();
+    }
+
+    public Turma adicionarAlunoTurma(UUID turmaUUID, UUID alunoUUID) {
         Turma turma = turmaRepository.findTurmaByUuid(turmaUUID);
         Aluno aluno = alunoRepository.findAlunoByUuid(alunoUUID);
 
@@ -84,7 +92,7 @@ public class TurmaService {
         return null;
     }
 
-    public Turma removerAlunoDaTurma(UUID turmaUUID, UUID alunoUUID) {
+    public Turma removerAlunoTurma(UUID turmaUUID, UUID alunoUUID) {
         Turma turma = turmaRepository.findTurmaByUuid(turmaUUID);
         Aluno aluno = alunoRepository.findAlunoByUuid(alunoUUID);
 
